@@ -1,6 +1,4 @@
-package ru.mts.hw_3;
-
-import java.math.BigDecimal;
+package ru.mts.hw_3.animal.impl;
 
 import static java.math.RoundingMode.HALF_UP;
 
@@ -8,26 +6,6 @@ public abstract class Predator extends AbstractAnimal {
 
     public Predator() {
         character = "aggressive";
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getBreed() {
-        return breed;
-    }
-
-    @Override
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    @Override
-    public String getCharacter() {
-        return character;
     }
 
     @Override

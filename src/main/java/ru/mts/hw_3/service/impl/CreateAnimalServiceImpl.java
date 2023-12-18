@@ -1,4 +1,11 @@
-package ru.mts.hw_3;
+package ru.mts.hw_3.service.impl;
+
+import ru.mts.hw_3.animal.Animal;
+import ru.mts.hw_3.animal.impl.Deer;
+import ru.mts.hw_3.animal.impl.Rabbit;
+import ru.mts.hw_3.animal.impl.Shark;
+import ru.mts.hw_3.animal.impl.Wolf;
+import ru.mts.hw_3.service.CreateAnimalService;
 
 import java.math.BigDecimal;
 

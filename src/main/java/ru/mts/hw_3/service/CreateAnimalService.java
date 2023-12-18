@@ -1,9 +1,15 @@
-package ru.mts.hw_3;
+package ru.mts.hw_3.service;
+
+import ru.mts.hw_3.animal.Animal;
+import ru.mts.hw_3.animal.impl.Deer;
+import ru.mts.hw_3.animal.impl.Rabbit;
+import ru.mts.hw_3.animal.impl.Shark;
+import ru.mts.hw_3.animal.impl.Wolf;
 
 import java.math.BigDecimal;
 
 /**
- * Интерфейс для создания различных объектов животных и вывода их характеристик
+ *  Интерфейс для создания различных объектов животных и вывода их характеристик
  */
 public interface CreateAnimalService {
     /**

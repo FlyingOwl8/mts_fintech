@@ -1,4 +1,4 @@
-package ru.mts.hw_3;
+package ru.mts.hw_3.animal;
 
 import java.math.BigDecimal;
 
@@ -10,14 +10,14 @@ public interface Animal {
     /**
      * Метод получения названия животного
      *
-     * @return Объект класса String - название животного"
+     * @return Объект класса String - название животного
      */
     String getName();
 
     /**
      * Метод получения породы животного
      *
-     * @return Объект класса String - порода животного"
+     * @return Объект класса String - порода животного
      */
     String getBreed();
 
@@ -31,7 +31,7 @@ public interface Animal {
     /**
      * Метод получения характера животного
      *
-     * @return Объект класса String - характер животного"
+     * @return Объект класса String - характер животного
      */
     String getCharacter();
 }

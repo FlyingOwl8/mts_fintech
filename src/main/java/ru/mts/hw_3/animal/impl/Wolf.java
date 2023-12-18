@@ -1,4 +1,4 @@
-package ru.mts.hw_3;
+package ru.mts.hw_3.animal.impl;
 
 import java.math.BigDecimal;
 

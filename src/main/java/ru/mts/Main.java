@@ -1,6 +1,6 @@
 package ru.mts;
 
-import ru.mts.hw_3.*;
+import ru.mts.hw_3.service.impl.CreateAnimalServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
