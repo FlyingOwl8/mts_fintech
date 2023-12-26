@@ -36,17 +36,17 @@ public class SearchServiceImpl implements SearchService {
      * которые старше N лет
      *
      * @param animalArray Массив животных - объектов, реализующих интерфейс Animal
-     * @param N           Число типа int - заданный возраст
+     * @param n           Число типа int - заданный возраст
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
-    public Animal[] findOlderAnimals(Animal[] animalArray, int N) {
+    public Animal[] findOlderAnimals(Animal[] animalArray, int n) {
         validateAnimals(animalArray);
 
         LocalDate currentDate = LocalDate.now();
         List<Animal> olderAnimalsArrayList = new ArrayList<>();
 
         for (Animal animal : animalArray) {
-            if (Period.between(animal.getBirthDate(), currentDate).getYears() > N) {
+            if (Period.between(animal.getBirthDate(), currentDate).getYears() > n) {
                 olderAnimalsArrayList.add(animal);
             }
         }
@@ -65,7 +65,7 @@ public class SearchServiceImpl implements SearchService {
 
         for (Animal currentAnimal : animalArray) {
             if (uniqueAnimals.contains(currentAnimal)) {
-                System.out.println("Найден дубликат:" + currentAnimal);
+                System.out.println("Найден дубликат: " + currentAnimal);
             }
             uniqueAnimals.add(currentAnimal);
         }

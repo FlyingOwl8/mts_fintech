@@ -17,10 +17,10 @@ public interface SearchService {
      * которые старше N лет
      *
      * @param animalArray Массив животных - объектов, реализующих интерфейс Animal
-     * @param N           Число типа int - заданный возраст
+     * @param n           Число типа int - заданный возраст
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
-    Animal[] findOlderAnimals(Animal[] animalArray, int N);
+    Animal[] findOlderAnimals(Animal[] animalArray, int n);
 
     /**
      * Метод для нахождения дубликатов в массиве животных
