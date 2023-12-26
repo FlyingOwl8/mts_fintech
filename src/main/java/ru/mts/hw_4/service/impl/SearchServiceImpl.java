@@ -62,17 +62,12 @@ public class SearchServiceImpl implements SearchService {
         validateAnimals(animalArray);
 
         Set<Animal> uniqueAnimals = new HashSet<>();
-        Set<Animal> duplicatedAnimals = new HashSet<>();
 
         for (Animal currentAnimal : animalArray) {
             if (uniqueAnimals.contains(currentAnimal)) {
-                if (!duplicatedAnimals.contains(currentAnimal)) {
-                    System.out.println(currentAnimal);
-                    duplicatedAnimals.add(currentAnimal);
-                }
-            } else {
-                uniqueAnimals.add(currentAnimal);
+                System.out.println("Найден дубликат:" + currentAnimal);
             }
+            uniqueAnimals.add(currentAnimal);
         }
         System.out.println("-----");
     }
