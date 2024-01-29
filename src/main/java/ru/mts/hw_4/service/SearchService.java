@@ -2,6 +2,8 @@ package ru.mts.hw_4.service;
 
 import ru.mts.hw_4.animal.Animal;
 
+import java.util.List;
+
 public interface SearchService {
     /**
      * Метод для нахождения в массиве животных имён тех животных,
@@ -27,5 +29,7 @@ public interface SearchService {
      *
      * @param animalArray Массив животных - объектов, реализующих интерфейс Animal
      */
-    void findDuplicates(Animal[] animalArray);
+    List<Animal> findDuplicates(Animal[] animalArray);
+
+    void printDuplicates(Animal[] animalArray);
 }

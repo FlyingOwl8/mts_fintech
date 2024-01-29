@@ -58,16 +58,24 @@ public class SearchServiceImpl implements SearchService {
      *
      * @param animalArray Массив животных - объектов, реализующих интерфейс Animal
      */
-    public void findDuplicates(Animal[] animalArray) {
+    public List<Animal> findDuplicates(Animal[] animalArray) {
         validateAnimals(animalArray);
 
         Set<Animal> uniqueAnimals = new HashSet<>();
-
+        List<Animal> duplicatedAnimals = new ArrayList<>();
         for (Animal currentAnimal : animalArray) {
             if (uniqueAnimals.contains(currentAnimal)) {
-                System.out.println("Найден дубликат: " + currentAnimal);
+                duplicatedAnimals.add(currentAnimal);
             }
             uniqueAnimals.add(currentAnimal);
+        }
+        return duplicatedAnimals;
+    }
+
+    public void printDuplicates(Animal[] animalArray) {
+        List<Animal> duplicatedAnimals = findDuplicates(animalArray);
+        for (Animal currentAnimal : duplicatedAnimals) {
+            System.out.println("Найден дубликат: " + currentAnimal);
         }
         System.out.println("-----");
     }

@@ -36,9 +36,9 @@ public class Main {
         }
         System.out.println("-----");
         System.out.println("Поиск одинаковых животные в массиве с разными животными:");
-        searchService.findDuplicates(animalArray);
+        searchService.printDuplicates(animalArray);
 
         System.out.println("Поиск одинаковых животных в массиве с дубликатами:");
-        searchService.findDuplicates(arrayOfDuplicatedAnimals);
+        searchService.printDuplicates(arrayOfDuplicatedAnimals);
     }
 }
