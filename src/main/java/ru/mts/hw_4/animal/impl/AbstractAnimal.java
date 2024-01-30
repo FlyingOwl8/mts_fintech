@@ -74,10 +74,10 @@ public abstract class AbstractAnimal implements Animal {
         }
         if (object instanceof AbstractAnimal) {
             AbstractAnimal animal = (AbstractAnimal) object;
-            return Objects.equals(name, animal.name) &
-                    Objects.equals(breed, animal.breed) &
-                    Objects.equals(character, animal.character) &
-                    Objects.equals(cost, animal.cost) &
+            return Objects.equals(name, animal.name) &&
+                    Objects.equals(breed, animal.breed) &&
+                    Objects.equals(character, animal.character) &&
+                    Objects.equals(cost, animal.cost) &&
                     Objects.equals(birthDate, animal.birthDate);
         }
         return false;

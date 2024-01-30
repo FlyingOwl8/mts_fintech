@@ -1,6 +1,7 @@
 package ru.mts.hw_4;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +21,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SearchServiceTest {
-    SearchService searchService = new SearchServiceImpl();
+    SearchService searchService;
+
+    @BeforeEach
+    public void initializeSearchService() {
+        searchService = new SearchServiceImpl();
+    }
 
     @Test
     @DisplayName("Тестирование поиска животных, родившихся в високосный год")
@@ -54,10 +60,10 @@ public class SearchServiceTest {
     @DisplayName("Тестирование поиска животных старше данного возраста")
     public void findOlderAnimals(int age) {
         Animal[] animalArray = {
-                new Wolf("gray", BigDecimal.valueOf(15), LocalDate.of(2020, 1, 1)),
-                new Shark("tiger", BigDecimal.valueOf(15), LocalDate.of(2021, 1, 1)),
-                new Deer("european", BigDecimal.valueOf(15), LocalDate.of(2022, 1, 1)),
-                new Rabbit("white", BigDecimal.valueOf(15), LocalDate.of(2023, 1, 1)),
+                new Wolf("gray", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 4, 1, 1)),
+                new Shark("tiger", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 3, 1, 1)),
+                new Deer("european", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 2, 1, 1)),
+                new Rabbit("white", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 1, 1, 1)),
         };
         Animal[] correctAnswer = Arrays.copyOfRange(animalArray, 0, 4 - age);
         Animal[] emptyArray = {};
