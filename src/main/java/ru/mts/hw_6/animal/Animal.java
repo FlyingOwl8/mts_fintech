@@ -1,6 +1,7 @@
-package ru.mts.hw_3.animal;
+package ru.mts.hw_6.animal;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Интерфейс для всех классов животных
@@ -34,4 +35,11 @@ public interface Animal {
      * @return Объект класса String - характер животного
      */
     String getCharacter();
+
+    /**
+     * Метод получения даты рождения животного
+     *
+     * @return Объект класса LocalDate - дату рождения животного животного
+     */
+    LocalDate getBirthDate();
 }
