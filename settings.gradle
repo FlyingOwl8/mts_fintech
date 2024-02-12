@@ -1,2 +1,3 @@
 rootProject.name = 'mts_hw'
+include 'animal-creation-starter'
 

@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface ConcreteAnimalFactory {
-    Animal createAnimal(String breed, BigDecimal cost, LocalDate birthDate);
+    Animal createAnimal(String name, String breed, BigDecimal cost, LocalDate birthDate);
 }

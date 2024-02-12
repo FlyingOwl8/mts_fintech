@@ -1,5 +1,6 @@
 package ru.mts.hw_7.sheduled;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.mts.hw_7.animal.Animal;
@@ -7,14 +8,11 @@ import ru.mts.hw_7.repository.AnimalsRepository;
 
 
 @Component
+@RequiredArgsConstructor
 public class SheduledTask {
-    AnimalsRepository animalsRepository;
+    private final AnimalsRepository animalsRepository;
 
-    public SheduledTask(AnimalsRepository animalsRepository) {
-        this.animalsRepository = animalsRepository;
-    }
-
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000)
     public void reportCurrentTime() {
         String[] animalNamesArray = animalsRepository.findLeapYearNames();
         System.out.println("Животные, родившиеся в високосный год:");

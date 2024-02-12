@@ -11,16 +11,9 @@ public class Config {
     }
 /**
     @Bean
-    @Scope("prototype")
-    public CreateAnimalService createAnimalService() {
-        CreateAnimalService createAnimalService = new CreateAnimalServiceImpl();
+    @Scope("prototype") public CreateAnimalService createAnimalService(AnimalFactory factory) {
+    CreateAnimalService createAnimalService = new CreateAnimalServiceImpl(factory);
         return createAnimalService;
-    }
- */
-/**
-    @Bean
-    public AnimalsRepository animalsRepository(CreateAnimalService createAnimalService) {
-        return new AnimalsRepositoryImpl(createAnimalService);
     }
  */
 }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Component
 public class DeerFactory implements ConcreteAnimalFactory {
-    public Animal createAnimal(String breed, BigDecimal cost, LocalDate birthDate) {
-        return new Deer(breed, cost, birthDate);
+    public Animal createAnimal(String name, String breed, BigDecimal cost, LocalDate birthDate) {
+        return new Deer(name, breed, cost, birthDate);
     }
 }

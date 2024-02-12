@@ -1,62 +1,49 @@
 package ru.mts.hw_7.animal.impl;
 
+import lombok.Getter;
 import ru.mts.hw_7.animal.Animal;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Getter
 public abstract class AbstractAnimal implements Animal {
-    protected String name;
-    protected String breed;
-    protected String character;
-    protected BigDecimal cost;
-    protected LocalDate birthDate;
-
     /**
-     * Метод получения названия животного
+     * -- GETTER --
+     *  Метод получения названия животного
      *
      * @return Объект класса String - название животного
      */
-    public String getName() {
-        return name;
-    }
-
+    protected String name;
     /**
-     * Метод получения породы животного
+     * -- GETTER --
+     *  Метод получения породы животного
      *
      * @return Объект класса String - порода животного
      */
-    public String getBreed() {
-        return breed;
-    }
-
+    protected String breed;
     /**
-     * Метод получения цены животного
-     *
-     * @return Объект класса BigDecimal - цена животного
-     */
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    /**
-     * Метод получения характера животного
+     * -- GETTER --
+     *  Метод получения характера животного
      *
      * @return Объект класса String - характер животного
      */
-    public String getCharacter() {
-        return character;
-    }
-
+    protected String character;
     /**
-     * Метод получения даты рождения животного
+     * -- GETTER --
+     *  Метод получения цены животного
+     *
+     * @return Объект класса BigDecimal - цена животного
+     */
+    protected BigDecimal cost;
+    /**
+     * -- GETTER --
+     *  Метод получения даты рождения животного
      *
      * @return Объект класса LocalDate - дату рождения животного животного
      */
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
+    protected LocalDate birthDate;
 
     /**
      * Метод проверки животных на идентичность

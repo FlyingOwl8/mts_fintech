@@ -10,6 +10,7 @@ import ru.mts.hw_7.factory.ConcreteAnimalFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
@@ -21,16 +22,24 @@ public class AnimalFactoryImpl implements AnimalFactory {
     private final ConcreteAnimalFactory rabbitFactory;
 
     public Animal createAnimal(AnimalTypes type, String breed, BigDecimal cost, LocalDate birthDate) {
-        String[] animalNames = animalNameConfig.getArrayOfStrings();
+        String[] wolfNames = animalNameConfig.getWolfNames();
+        String[] sharkNames = animalNameConfig.getSharkNames();
+        String[] rabbitNames = animalNameConfig.getRabbitNames();
+        String[] deerNames = animalNameConfig.getDeerNames();
+        int i;
         switch (type) {
             case WOLF:
-                return wolfFactory.createAnimal(breed, cost, birthDate);
+                i = ThreadLocalRandom.current().nextInt(0, wolfNames.length);
+                return wolfFactory.createAnimal(wolfNames[i], breed, cost, birthDate);
             case SHARK:
-                return sharkFactory.createAnimal(breed, cost, birthDate);
+                i = ThreadLocalRandom.current().nextInt(0, sharkNames.length);
+                return sharkFactory.createAnimal(sharkNames[i], breed, cost, birthDate);
             case RABBIT:
-                return rabbitFactory.createAnimal(breed, cost, birthDate);
+                i = ThreadLocalRandom.current().nextInt(0, rabbitNames.length);
+                return rabbitFactory.createAnimal(rabbitNames[i], breed, cost, birthDate);
             case DEER:
-                return deerFactory.createAnimal(breed, cost, birthDate);
+                i = ThreadLocalRandom.current().nextInt(0, deerNames.length);
+                return deerFactory.createAnimal(deerNames[i], breed, cost, birthDate);
             default:
                 throw new IllegalArgumentException("Wrong animal type:" + type);
         }

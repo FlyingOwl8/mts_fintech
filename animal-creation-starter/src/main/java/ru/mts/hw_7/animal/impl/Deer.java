@@ -3,10 +3,10 @@ package ru.mts.hw_7.animal.impl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Wolf extends Predator {
-    public Wolf(String breed, BigDecimal cost, LocalDate birthDate) {
+public class Deer extends Prey {
+    public Deer(String name, String breed, BigDecimal cost, LocalDate birthDate) {
         validateArguments(breed, cost, birthDate);
-        this.name = "wolf";
+        this.name = name;
         this.breed = breed;
         this.cost = cost;
         this.birthDate = birthDate;
