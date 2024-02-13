@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class AbstractAnimalTest {
-    Animal wolf = new Wolf("gray", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
-    Animal shark = new Shark("tiger", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
-    Animal deer = new Deer("european", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
-    Animal wolfDuplicate = new Wolf("gray", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
-    Animal wolfDifferent = new Wolf("gray", BigDecimal.valueOf(25), LocalDate.of(2020, 12, 31));
+    Animal wolf = new Wolf("default_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
+    Animal shark = new Shark("default_shark", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
+    Animal deer = new Deer("default_deer", "european deer", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
+    Animal wolfDuplicate = new Wolf("default_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31));
+    Animal wolfDifferent = new Wolf("default_wolf", "gray wolf", BigDecimal.valueOf(25), LocalDate.of(2020, 12, 31));
     Animal nullAnimal = null;
     BigDecimal anotherType = BigDecimal.valueOf(15);
 
