@@ -60,7 +60,6 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     }
 
     private Animal createNewAnimal(int i) {
-//        AnimalFactory factory = new AnimalFactoryImpl();
         switch (i % 4) {
             case 0:
                 return factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf((i + 5) * 3), LocalDate.ofYearDay(2020, (i * 2) % 365 + 1));
@@ -73,6 +72,5 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             default:
                 throw new IllegalStateException("Wrong ENUM type");
         }
-
     }
 }

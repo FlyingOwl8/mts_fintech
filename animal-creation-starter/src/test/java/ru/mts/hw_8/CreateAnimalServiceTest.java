@@ -33,11 +33,11 @@ public class CreateAnimalServiceTest {
     @Test
     @DisplayName("Тестирование сервиса создания животных")
     public void createAnimalsTest() {
-        Mockito.when(factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3))).thenReturn(wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)));
+        Mockito.when(factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1))).thenReturn(wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1)));
         Mockito.when(factory.createAnimal(AnimalTypes.RABBIT, "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3))).thenReturn(rabbitFactory.createAnimal("new_rabbit", "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3)));
 
         Animal[] expectedArray = {
-                wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)),
+                wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1)),
                 rabbitFactory.createAnimal("new_rabbit", "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3)),
         };
         Animal[] actualArray = createService.createAnimals(2);
