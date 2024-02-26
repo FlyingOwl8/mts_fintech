@@ -17,6 +17,10 @@ import ru.mts.hw_8.service.impl.CreateAnimalServiceImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,12 +40,16 @@ public class CreateAnimalServiceTest {
         Mockito.when(factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1))).thenReturn(wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1)));
         Mockito.when(factory.createAnimal(AnimalTypes.RABBIT, "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3))).thenReturn(rabbitFactory.createAnimal("new_rabbit", "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3)));
 
-        Animal[] expectedArray = {
-                wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1)),
-                rabbitFactory.createAnimal("new_rabbit", "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3)),
-        };
-        Animal[] actualArray = createService.createAnimals(2);
+        Map<String, List<Animal>> expectedMap = new HashMap<>();
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(wolfFactory.createAnimal("new_wolf", "gray wolf", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 1)));
+        expectedMap.put("gray wolf", wolfList);
+        List<Animal> rabbitList = new ArrayList<>();
+        rabbitList.add(rabbitFactory.createAnimal("new_rabbit", "white rabbit", BigDecimal.valueOf(0.75), LocalDate.ofYearDay(2020, 3)));
+        expectedMap.put("white rabbit", rabbitList);
 
-        Assertions.assertArrayEquals(expectedArray, actualArray);
+        Map<String, List<Animal>> actualMap = createService.createAnimals(2);
+
+        Assertions.assertEquals(expectedMap, actualMap);
     }
 }

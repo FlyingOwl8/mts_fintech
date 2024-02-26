@@ -2,6 +2,9 @@ package ru.mts.hw_8.service;
 
 import ru.mts.hw_8.animal.Animal;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Интерфейс для создания различных объектов животных и вывода их характеристик
  */
@@ -15,7 +18,7 @@ public interface CreateAnimalService {
      *
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
-    Animal[] createAnimals();
+    Map<String, List<Animal>> createAnimals();
     /**
     default Animal[] createAnimals() {
         Animal[] animalArray = new Animal[10];

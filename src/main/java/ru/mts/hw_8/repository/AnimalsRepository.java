@@ -2,7 +2,8 @@ package ru.mts.hw_8.repository;
 
 import ru.mts.hw_8.animal.Animal;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Map;
 
 public interface AnimalsRepository {
 //    void generateAnimals();
@@ -13,7 +14,7 @@ public interface AnimalsRepository {
      *
      * @return Массив объектов класса String - имён животных
      */
-    String[] findLeapYearNames();
+    Map<String, LocalDate> findLeapYearNames();
 
     /**
      * Метод для нахождения в массиве животных тех животных,
@@ -22,13 +23,13 @@ public interface AnimalsRepository {
      * @param n           Число типа int - заданный возраст
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
-    Animal[] findOlderAnimals(int n);
+    Map<Animal, Integer> findOlderAnimals(int n);
 
     /**
      * Метод для нахождения дубликатов в массиве животных
      *
      */
-    List<Animal> findDuplicates();
+    Map<String, Integer> findDuplicates();
 
     void printDuplicates();
 }

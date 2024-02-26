@@ -9,6 +9,10 @@ import ru.mts.hw_8.service.CreateAnimalService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -32,13 +36,21 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
      * @param n число типа int, количество объектов для создания
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
-    public Animal[] createAnimals(int n) {
-        Animal[] animalArray = new Animal[n];
-
+    public Map<String, List<Animal>> createAnimals(int n) {
+        Map<String, List<Animal>> animalsMap = new HashMap<>();
+        Animal newAnimal;
         for (int i = 0; i < n; i++) {
-            animalArray[i] = createNewAnimal(i);
+            newAnimal = createNewAnimal(i);
+            String animalType = newAnimal.getBreed();
+            if (animalsMap.containsKey(animalType)) {
+                List<Animal> list = animalsMap.get(animalType);
+            } else {
+                List<Animal> list = new ArrayList<>();
+                list.add(newAnimal);
+                animalsMap.put(animalType, list);
+            }
         }
-        return animalArray;
+        return animalsMap;
     }
 
     /**
@@ -48,15 +60,24 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
     @Override
-    public Animal[] createAnimals() {
-        Animal[] animalArray = new Animal[10];
+    public Map<String, List<Animal>> createAnimals() {
+        Map<String, List<Animal>> animalsMap = new HashMap<>();
+        Animal newAnimal;
 
         int i = 0;
         do {
-            animalArray[i] = createNewAnimal(i);
+            newAnimal = createNewAnimal(i);
+            String animalType = newAnimal.getBreed();
+            if (animalsMap.containsKey(animalType)) {
+                List<Animal> list = animalsMap.get(animalType);
+            } else {
+                List<Animal> list = new ArrayList<>();
+                list.add(newAnimal);
+                animalsMap.put(animalType, list);
+            }
             i++;
         } while (i < 10);
-        return animalArray;
+        return animalsMap;
     }
 
     private Animal createNewAnimal(int i) {

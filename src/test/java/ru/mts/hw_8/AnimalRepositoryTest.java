@@ -24,8 +24,9 @@ import ru.mts.hw_8.service.impl.CreateAnimalServiceImpl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -40,178 +41,273 @@ public class AnimalRepositoryTest {
     @Test
     @DisplayName("Поиск существующих животных, родившихся в високосный год")
     public void findLeapYearNamesTest1() {
-        Animal[] leapYearAnimals = {
-                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10)),
-                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10)),
-                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10)),
-                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10)),
-        };
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10))
+        );
+        List<Animal> sharkList = List.of(
+                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10))
+        );
+        List<Animal> deerList = List.of(
+                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10))
+        );
+        List<Animal> rabbitList = List.of(
+                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.of(2024, 1, 10))
+        );
+        Map<String, List<Animal>> leapYearAnimals = Map.of(
+                "gray wolf", wolfList,
+                "tiger shark", sharkList,
+                "european deer", deerList,
+                "white rabbit", rabbitList
+        );
         Mockito.when(createService.createAnimals()).thenReturn(leapYearAnimals);
         animalsRepository.postConstruct();
 
-        String[] expectedLeapYearAnimals = {"wolf1", "shark1", "deer1", "rabbit1"};
-        Assertions.assertArrayEquals(expectedLeapYearAnimals, animalsRepository.findLeapYearNames());
+        Map<String, LocalDate> expectedAnimals = Map.of(
+                "gray wolf wolf1", LocalDate.of(2024, 1, 10),
+                "tiger shark shark1", LocalDate.of(2024, 1, 10),
+                "european deer deer1", LocalDate.of(2024, 1, 10),
+                "white rabbit rabbit1", LocalDate.of(2024, 1, 10)
+        );
+
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findLeapYearNames());
     }
 
     @Test
     @DisplayName("Поиск несуществующих животных, родившихся в високосный год")
     public void findLeapYearNamesTest2() {
-        Animal[] noLeapYearAnimals = {
-                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31)),
-                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31)),
-                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31)),
-                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31)),
-        };
-        Mockito.when(createService.createAnimals()).thenReturn(noLeapYearAnimals);
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31))
+        );
+        List<Animal> sharkList = List.of(
+                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31))
+        );
+        List<Animal> deerList = List.of(
+                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31))
+        );
+        List<Animal> rabbitList = List.of(
+                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.of(2023, 12, 31))
+        );
+        Map<String, List<Animal>> leapYearAnimals = Map.of(
+                "gray wolf", wolfList,
+                "tiger shark", sharkList,
+                "european deer", deerList,
+                "white rabbit", rabbitList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(leapYearAnimals);
         animalsRepository.postConstruct();
 
-        String[] EmptyAnimalsArray = {};
-        Assertions.assertArrayEquals(EmptyAnimalsArray, animalsRepository.findLeapYearNames());
+        Map<String, LocalDate> expectedAnimals = new HashMap<>();
+
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findLeapYearNames());
     }
 
     @Test
     @DisplayName("Поиск животных, родившихся в високосный год, в пустом массиве")
     public void findLeapYearNamesTest3() {
-        Animal[] emptyAnimalsArray = {};
-        Mockito.when(createService.createAnimals()).thenReturn(emptyAnimalsArray);
+        Map<String, List<Animal>> emptyAnimalsMap = new HashMap<>();
+        Mockito.when(createService.createAnimals()).thenReturn(emptyAnimalsMap);
         animalsRepository.postConstruct();
 
-        String[] EmptyAnimalsArray = {};
-        Assertions.assertArrayEquals(EmptyAnimalsArray, animalsRepository.findLeapYearNames());
+        Map<String, LocalDate> expectedEmptyAnimals = new HashMap<>();
+        Assertions.assertEquals(expectedEmptyAnimals, animalsRepository.findLeapYearNames());
     }
 
     @Test
     @DisplayName("Поиск животных, родившихся в високосный год, в незаданном массиве")
     public void findLeapYearNamesTest4() {
-        Animal[] nullAnimalsArray = null;
-        Mockito.when(createService.createAnimals()).thenReturn(nullAnimalsArray);
+        Map<String, List<Animal>> nullAnimalsMap = null;
+        Mockito.when(createService.createAnimals()).thenReturn(nullAnimalsMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findLeapYearNames(), "Array of Animals is null");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findLeapYearNames(), "Map of Animals is null");
     }
 
     @Test
     @DisplayName("Поиск животных, родившихся в високосный год, в массиве с незаданными элементами")
     public void findLeapYearNamesTest5() {
-        Animal[] nullElementsArray = {null, null};
-        Mockito.when(createService.createAnimals()).thenReturn(nullElementsArray);
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(null);
+        List<Animal> deerList = new ArrayList<>();
+        deerList.add(null);
+        Map<String, List<Animal>> nullElementsMap = Map.of(
+                "gray wolf", wolfList,
+                "european deer", deerList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(nullElementsMap);
         animalsRepository.postConstruct();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findLeapYearNames(), "Animal is null");
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3})
+    @ValueSource(ints = {1, 2, 3, 4})
     @DisplayName("Поиск животных старше данного возраста")
     public void findOlderAnimals1(int age) {
-        Animal[] animalArray = {
-                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 4, 1, 1)),
-                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 3, 1, 1)),
-                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 2, 1, 1)),
-                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 1, 1, 1)),
-        };
-        Mockito.when(createService.createAnimals()).thenReturn(animalArray);
+        Animal wolf = new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 4, 1, 1));
+        Animal shark = new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 3, 1, 1));
+        Animal deer = new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 2, 1, 1));
+        Animal rabbit = new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.of(LocalDate.now().getYear() - 1, 1, 1));
+        List<Animal> wolfList = List.of(wolf);
+        List<Animal> sharkList = List.of(shark);
+        List<Animal> deerList = List.of(deer);
+        List<Animal> rabbitList = List.of(rabbit);
+        Map<String, List<Animal>> animalMap = Map.of(
+                "gray wolf", wolfList,
+                "tiger shark", sharkList,
+                "european deer", deerList,
+                "white rabbit", rabbitList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        Animal[] correctAnswer = Arrays.copyOfRange(animalArray, 0, 4 - age);
-        Assertions.assertArrayEquals(correctAnswer, animalsRepository.findOlderAnimals(age));
+        Map<Animal, Integer> expectedAnimals = new HashMap<>();
+        expectedAnimals.put(wolf, 4);
+        if (age < 3) {
+            expectedAnimals.put(shark, 3);
+        }
+        if (age < 2) {
+            expectedAnimals.put(deer, 2);
+        }
+        if (age < 1) {
+            expectedAnimals.put(rabbit, 1);
+        }
+
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findOlderAnimals(age));
     }
 
     @Test
     @DisplayName("Поиск животных старше данного возраста в пустом массиве")
     public void findOlderAnimals2() {
         int age = 1;
-        Animal[] emptyArray = {};
-        Mockito.when(createService.createAnimals()).thenReturn(emptyArray);
+        Map<String, List<Animal>> emptyMap = new HashMap<>();
+        Mockito.when(createService.createAnimals()).thenReturn(emptyMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertArrayEquals(emptyArray, animalsRepository.findOlderAnimals(age));
+        Map<Animal, Integer> expectedEmptyAnimals = new HashMap<>();
+
+        Assertions.assertEquals(expectedEmptyAnimals, animalsRepository.findOlderAnimals(age));
     }
 
     @Test
     @DisplayName("Поиск животных старше данного возраста в незаданном массиве")
     public void findOlderAnimals3() {
         int age = 1;
-        Animal[] nullArray = null;
-        Mockito.when(createService.createAnimals()).thenReturn(nullArray);
+        Map<String, List<Animal>> nullAnimalsMap = null;
+        Mockito.when(createService.createAnimals()).thenReturn(nullAnimalsMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findOlderAnimals(age), "Array of Animals is null");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findOlderAnimals(age), "Map of Animals is null");
     }
 
     @Test
     @DisplayName("Поиск животных старше данного возраста в массиве с незаданными элементами")
     public void findOlderAnimals4() {
         int age = 1;
-        Animal[] nullElementsArray = {null, null};
-        Mockito.when(createService.createAnimals()).thenReturn(nullElementsArray);
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(null);
+        List<Animal> deerList = new ArrayList<>();
+        deerList.add(null);
+        Map<String, List<Animal>> nullElementsMap = Map.of(
+                "gray wolf", wolfList,
+                "european deer", deerList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(nullElementsMap);
         animalsRepository.postConstruct();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findOlderAnimals(age), "Animal is null");
     }
 
     @Test
-    @DisplayName("Тестирование поиска дубликатов животных в массиве с уникальными элементами")
+    @DisplayName("Поиск дубликатов животных в массиве с уникальными элементами")
     public void findDuplicatesTest1() {
-        Animal[] arrayOfUniqueArray = {
-                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
-                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.now()),
-                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.now()),
-                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now()),
-        };
-        Mockito.when(createService.createAnimals()).thenReturn(arrayOfUniqueArray);
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        List<Animal> sharkList = List.of(
+                new Shark("shark1", "tiger shark", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        List<Animal> deerList = List.of(
+                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        List<Animal> rabbitList = List.of(
+                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        Map<String, List<Animal>> animalMap = Map.of(
+                "gray wolf", wolfList,
+                "tiger shark", sharkList,
+                "european deer", deerList,
+                "white rabbit", rabbitList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        List<Animal> emptyList = new ArrayList<>();
-        Assertions.assertEquals(emptyList, animalsRepository.findDuplicates());
+        Map<String, Integer> expectedAnimals = new HashMap<>();
+
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findDuplicates());
     }
 
+
     @Test
-    @DisplayName("Тестирование поиска дубликатов животных в массиве с повторяющимися элементами")
+    @DisplayName("Поиск дубликатов животных в массиве с повторяющимися элементами")
     public void findDuplicatesTest2() {
-        Animal[] arrayOfDuplicatedAnimals = {new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
+        List<Animal> wolfList = List.of(
                 new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
                 new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        List<Animal> rabbitList = List.of(
                 new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now()),
                 new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now())
-        };
-        Mockito.when(createService.createAnimals()).thenReturn(arrayOfDuplicatedAnimals);
+        );
+        Map<String, List<Animal>> animalMap = Map.of(
+                "gray wolf", wolfList,
+                "white rabbit", rabbitList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        List<Animal> answerForDuplicatedAnimals = new ArrayList<>() {{
-            add(new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()));
-            add(new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()));
-            add(new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now()));
-        }};
-        Assertions.assertEquals(answerForDuplicatedAnimals, animalsRepository.findDuplicates());
+        Map<String, Integer> expectedAnimals = Map.of(
+                "gray wolf", 2,
+                "white rabbit", 1
+        );
+
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findDuplicates());
     }
 
     @Test
-    @DisplayName("Тестирование поиска дубликатов животных в пустом массиве")
+    @DisplayName("Поиск дубликатов животных в пустом массиве")
     public void findDuplicatesTest3() {
-        Animal[] emptyArray = {};
-        Mockito.when(createService.createAnimals()).thenReturn(emptyArray);
+        Map<String, List<Animal>> animalMap = new HashMap<>();
+        Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        List<Animal> emptyList = new ArrayList<>();
-        Assertions.assertEquals(emptyList, animalsRepository.findDuplicates());
+        Map<String, Integer> expectedAnimals = new HashMap<>();
+
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findDuplicates());
     }
 
     @Test
-    @DisplayName("Тестирование поиска дубликатов животных в незаданном массиве")
+    @DisplayName("Поиск дубликатов животных в незаданном массиве")
     public void findDuplicatesTest4() {
-        Animal[] nullArray = null;
-        Mockito.when(createService.createAnimals()).thenReturn(nullArray);
+        Map<String, List<Animal>> animalMap = null;
+        Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findDuplicates(), "Array of Animals is null");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findDuplicates(), "Map of Animals is null");
     }
 
     @Test
     @DisplayName("Тестирование поиска дубликатов животных в массиве с незаданными элементами")
     public void findDuplicatesTest5() {
-        Animal[] nullElementArray = {null, null};
-        Mockito.when(createService.createAnimals()).thenReturn(nullElementArray);
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(null);
+        List<Animal> deerList = new ArrayList<>();
+        deerList.add(null);
+        Map<String, List<Animal>> animalMap = Map.of(
+                "gray wolf", wolfList,
+                "european deer", deerList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findDuplicates(), "Animal is null");

@@ -9,20 +9,17 @@ import ru.mts.hw_8.service.CreateAnimalService;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class AnimalsRepositoryImpl implements AnimalsRepository {
-    private Animal[] animalArray;
+    private Map<String, List<Animal>> animalsMap;
     private final CreateAnimalService createAnimalService;
 
     @PostConstruct
     public void postConstruct() {
-        animalArray = createAnimalService.createAnimals();
+        animalsMap = createAnimalService.createAnimals();
     }
 
 
@@ -32,17 +29,19 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
      *
      * @return Массив объектов класса String - имён животных
      */
-    public String[] findLeapYearNames() {
+    public Map<String, LocalDate> findLeapYearNames() {
         validateAnimals();
 
-        List<String> leapYearNamesArrayList = new ArrayList<>();
+        Map<String, LocalDate> leapYearNames = new HashMap<>();
 
-        for (Animal animal : animalArray) {
-            if (animal.getBirthDate().isLeapYear()) {
-                leapYearNamesArrayList.add(animal.getName());
+        for (String animalType : animalsMap.keySet()) {
+            for (Animal animal : animalsMap.get(animalType)) {
+                if (animal.getBirthDate().isLeapYear()) {
+                    leapYearNames.put(animalType.concat(" ".concat(animal.getName())), animal.getBirthDate());
+                }
             }
         }
-        return leapYearNamesArrayList.toArray(new String[0]);
+        return leapYearNames;
     }
 
     /**
@@ -52,53 +51,78 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
      * @param n           Число типа int - заданный возраст
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
-    public Animal[] findOlderAnimals(int n) {
+    public Map<Animal, Integer> findOlderAnimals(int n) {
         validateAnimals();
 
         LocalDate currentDate = LocalDate.now();
-        List<Animal> olderAnimalsArrayList = new ArrayList<>();
+        Map<Animal, Integer> olderAnimalsMap = new HashMap<>();
 
-        for (Animal animal : animalArray) {
-            if (Period.between(animal.getBirthDate(), currentDate).getYears() > n) {
-                olderAnimalsArrayList.add(animal);
+        Animal oldestAnimal = null;
+
+        for (String animalType : animalsMap.keySet()) {
+            for (Animal animal : animalsMap.get(animalType)) {
+                if (Period.between(animal.getBirthDate(), currentDate).getYears() > n) {
+                    olderAnimalsMap.put(animal, Period.between(animal.getBirthDate(), currentDate).getYears());
+                }
+                if (oldestAnimal == null) {
+                    oldestAnimal = animal;
+                } else if (Period.between(animal.getBirthDate(), currentDate).getYears() >
+                        Period.between(oldestAnimal.getBirthDate(), currentDate).getYears()) {
+                    oldestAnimal = animal;
+                }
             }
         }
-        return olderAnimalsArrayList.toArray(new Animal[0]);
+        if (olderAnimalsMap.isEmpty()) {
+            if (oldestAnimal != null) {
+                olderAnimalsMap.put(oldestAnimal, Period.between(oldestAnimal.getBirthDate(), currentDate).getYears());
+            }
+        }
+        return olderAnimalsMap;
     }
 
     /**
      * Метод для нахождения дубликатов в массиве животных
      *
      */
-    public List<Animal> findDuplicates() {
+    public Map<String, Integer> findDuplicates() {
         validateAnimals();
 
         Set<Animal> uniqueAnimals = new HashSet<>();
-        List<Animal> duplicatedAnimals = new ArrayList<>();
-        for (Animal currentAnimal : animalArray) {
-            if (uniqueAnimals.contains(currentAnimal)) {
-                duplicatedAnimals.add(currentAnimal);
+        Map<String, Integer> duplicatedAnimals = new HashMap<>();
+
+        for (String animalType : animalsMap.keySet()) {
+            for (Animal currentAnimal : animalsMap.get(animalType)) {
+                if (uniqueAnimals.contains(currentAnimal)) {
+                    if (duplicatedAnimals.containsKey(currentAnimal.getBreed())) {
+                        int count = duplicatedAnimals.get(currentAnimal.getBreed());
+                        duplicatedAnimals.put(currentAnimal.getBreed(), count + 1);
+                    } else {
+                        duplicatedAnimals.put(currentAnimal.getBreed(), 1);
+                    }
+                }
+                uniqueAnimals.add(currentAnimal);
             }
-            uniqueAnimals.add(currentAnimal);
         }
         return duplicatedAnimals;
     }
 
     public void printDuplicates() {
-        List<Animal> duplicatedAnimals = findDuplicates();
-        for (Animal currentAnimal : duplicatedAnimals) {
+        Map<String, Integer> duplicatedAnimals = findDuplicates();
+        for (String currentAnimal : duplicatedAnimals.keySet()) {
             System.out.println("Найден дубликат: " + currentAnimal);
         }
         System.out.println("-----");
     }
 
     private void validateAnimals() {
-        if (animalArray == null) {
-            throw new IllegalArgumentException("Array of Animals is null");
+        if (animalsMap == null) {
+            throw new IllegalArgumentException("Map of Animals is null");
         }
-        for (Animal animal : animalArray) {
-            if (animal == null) {
-                throw new IllegalArgumentException("Animal is null");
+        for (String animalType : animalsMap.keySet()) {
+            for (Animal animal : animalsMap.get(animalType)) {
+                if (animal == null) {
+                    throw new IllegalArgumentException("Animal is null");
+                }
             }
         }
     }
