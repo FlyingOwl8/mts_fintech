@@ -3,6 +3,7 @@ package ru.mts.hw.repository;
 import ru.mts.hw.animal.Animal;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public interface AnimalsRepository {
@@ -29,7 +30,15 @@ public interface AnimalsRepository {
      * Метод для нахождения дубликатов в массиве животных
      *
      */
-    Map<String, Integer> findDuplicates();
+    Map<String, List<Animal>> findDuplicates();
 
     void printDuplicates();
+
+    double countAverageAge(List<Animal> animalsList);
+
+    void findAverageAge(List<Animal> animalsList);
+
+    List<Animal> findOldAndExpensive(List<Animal> animalsList);
+
+    List<Animal> findMinConstAnimals(List<Animal> animalsList);
 }

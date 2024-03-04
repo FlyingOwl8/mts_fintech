@@ -241,7 +241,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        Map<String, Integer> expectedAnimals = new HashMap<>();
+        Map<String, List<Animal>> expectedAnimals = new HashMap<>();
 
         Assertions.assertEquals(expectedAnimals, animalsRepository.findDuplicates());
     }
@@ -253,11 +253,14 @@ public class AnimalRepositoryTest {
         List<Animal> wolfList = List.of(
                 new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
                 new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
-                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now())
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
+                new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(20), LocalDate.now())
+
         );
         List<Animal> rabbitList = List.of(
                 new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now()),
-                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now())
+                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now()),
+                new Rabbit("rabbit2", "white rabbit", BigDecimal.valueOf(10), LocalDate.now())
         );
         Map<String, List<Animal>> animalMap = Map.of(
                 "gray wolf", wolfList,
@@ -266,11 +269,17 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        Map<String, Integer> expectedAnimals = Map.of(
-                "gray wolf", 2,
-                "white rabbit", 1
+        Map<String, List<Animal>> expectedAnimals = Map.of(
+                "gray wolf", List.of(
+                        new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
+                        new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now()),
+                        new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now())
+                ),
+                "white rabbit", List.of(
+                        new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now()),
+                        new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15), LocalDate.now())
+                )
         );
-
         Assertions.assertEquals(expectedAnimals, animalsRepository.findDuplicates());
     }
 
@@ -311,5 +320,70 @@ public class AnimalRepositoryTest {
         animalsRepository.postConstruct();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findDuplicates(), "Animal is null");
+    }
+
+    @Test
+    @DisplayName("Поиск среднего возраста")
+    public void countAverageAgeTest() {
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15),
+                        LocalDate.of(LocalDate.now().getYear() - 9, 1, 1)),
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15),
+                        LocalDate.of(LocalDate.now().getYear() - 5, 1, 1)),
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15),
+                        LocalDate.of(LocalDate.now().getYear() - 7, 1, 1))
+        );
+        Double expectedWolfAge = 7.0;
+        List<Animal> rabbitList = List.of(
+                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15),
+                        LocalDate.of(LocalDate.now().getYear() - 10, 1, 1)),
+                new Rabbit("rabbit1", "white rabbit", BigDecimal.valueOf(15),
+                        LocalDate.of(LocalDate.now().getYear() - 10, 1, 1))
+        );
+        Double expectedRabbitAge = 10.0;
+
+        Assertions.assertEquals(expectedWolfAge, animalsRepository.countAverageAge(wolfList));
+        Assertions.assertEquals(expectedRabbitAge, animalsRepository.countAverageAge(rabbitList));
+    }
+
+    @Test
+    @DisplayName("Тест метода findOldAndExpensive")
+    public void findOldAndExpensiveTest() {
+        Animal wolf1 = new Wolf("wolf4", "gray wolf", BigDecimal.valueOf(20),
+                LocalDate.of(LocalDate.now().getYear() - 7, 1, 1));
+        Animal wolf2 = new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(18),
+                LocalDate.of(LocalDate.now().getYear() - 8, 1, 1));
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(10),
+                        LocalDate.of(LocalDate.now().getYear() - 9, 1, 1)),
+                new Wolf("wolf3", "gray wolf", BigDecimal.valueOf(15),
+                        LocalDate.of(LocalDate.now().getYear() - 5, 1, 1)),
+                wolf1,
+                wolf2
+        );
+        List<Animal> expectedList = List.of(wolf2, wolf1);
+
+        Assertions.assertEquals(expectedList, animalsRepository.findOldAndExpensive(wolfList));
+    }
+
+    @Test
+    @DisplayName("Поиск 3 животных с минимальными ценами")
+    public void findMinConstAnimalsTest() {
+        Animal wolf1 = new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(10),
+                LocalDate.of(LocalDate.now().getYear() - 9, 1, 1));
+        Animal wolf2 = new Wolf("wolf3", "gray wolf", BigDecimal.valueOf(15),
+                LocalDate.of(LocalDate.now().getYear() - 5, 1, 1));
+        Animal wolf3 = new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(18),
+                LocalDate.of(LocalDate.now().getYear() - 8, 1, 1));
+        List<Animal> wolfList = List.of(
+                wolf1,
+                wolf2,
+                new Wolf("wolf4", "gray wolf", BigDecimal.valueOf(20),
+                        LocalDate.of(LocalDate.now().getYear() - 7, 1, 1)),
+                wolf3
+        );
+        List<Animal> expectedList = List.of(wolf2, wolf1, wolf3);
+
+        Assertions.assertEquals(expectedList, animalsRepository.findMinConstAnimals(wolfList));
     }
 }
