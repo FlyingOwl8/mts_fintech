@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.mts.hw.animal.Animal;
 import ru.mts.hw.config.AnimalNameConfig;
+import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.factory.AnimalFactory;
 import ru.mts.hw.factory.AnimalTypes;
 import ru.mts.hw.factory.ConcreteAnimalFactory;
@@ -42,7 +43,7 @@ public class AnimalFactoryImpl implements AnimalFactory {
                 i = ThreadLocalRandom.current().nextInt(0, deerNames.size());
                 return deerFactory.createAnimal(deerNames.get(i), breed, cost, birthDate);
             default:
-                throw new IllegalArgumentException("Wrong animal type:" + type);
+                throw new MyUncheckedException("Wrong animal type:" + type);
         }
     }
 }

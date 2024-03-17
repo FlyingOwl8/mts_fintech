@@ -3,6 +3,7 @@ package ru.mts.hw.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.mts.hw.animal.Animal;
+import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.factory.AnimalTypes;
 import ru.mts.hw.factory.impl.AnimalFactoryImpl;
 import ru.mts.hw.service.CreateAnimalService;
@@ -93,7 +94,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
             case 3:
                 return factory.createAnimal(AnimalTypes.DEER, "european deer", BigDecimal.valueOf((i + 0.5) * 2), LocalDate.ofYearDay(2020, (i * 2) % 365 + 1));
             default:
-                throw new IllegalStateException("Wrong ENUM type");
+                throw new MyUncheckedException("Wrong ENUM type");
         }
     }
 }

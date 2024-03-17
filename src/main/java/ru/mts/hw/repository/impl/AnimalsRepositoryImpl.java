@@ -3,6 +3,8 @@ package ru.mts.hw.repository.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.mts.hw.animal.Animal;
+import ru.mts.hw.exception.MyCheckedException;
+import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.repository.AnimalsRepository;
 import ru.mts.hw.service.CreateAnimalService;
 
@@ -61,6 +63,9 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
      * @return Массив животных - объектов, реализующих интерфейс Animal
      */
     public Map<Animal, Integer> findOlderAnimals(int n) {
+        if (n < 0) {
+            throw new MyUncheckedException("Age of animal can't be negative");
+        }
         validateAnimals();
 
         LocalDate currentDate = LocalDate.now();
@@ -127,12 +132,12 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     private void validateAnimals() {
         if (animalsMap == null) {
-            throw new IllegalArgumentException("Map of Animals is null");
+            throw new MyUncheckedException("Map of Animals is null");
         }
         for (String animalType : animalsMap.keySet()) {
             for (Animal animal : animalsMap.get(animalType)) {
                 if (animal == null) {
-                    throw new IllegalArgumentException("Animal is null");
+                    throw new MyUncheckedException("Animal is null");
                 }
             }
         }
@@ -172,7 +177,10 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         return sortedAnimals;
     }
 
-    public List<Animal> findMinConstAnimals(List<Animal> animalsList) {
+    public List<Animal> findMinConstAnimals(List<Animal> animalsList) throws MyCheckedException {
+        if (animalsList.size() < 3) {
+            throw new MyCheckedException("List must contain at least 3 elements");
+        }
         return animalsList
                 .stream()
                 .sorted(Comparator.comparing(Animal::getCost))

@@ -18,6 +18,7 @@ import ru.mts.hw.animal.impl.Deer;
 import ru.mts.hw.animal.impl.Rabbit;
 import ru.mts.hw.animal.impl.Shark;
 import ru.mts.hw.animal.impl.Wolf;
+import ru.mts.hw.exception.MyCheckedException;
 import ru.mts.hw.repository.impl.AnimalsRepositoryImpl;
 import ru.mts.hw.service.impl.CreateAnimalServiceImpl;
 
@@ -368,13 +369,14 @@ public class AnimalRepositoryTest {
 
     @Test
     @DisplayName("Поиск 3 животных с минимальными ценами")
-    public void findMinConstAnimalsTest() {
+    public void findMinConstAnimalsTest() throws MyCheckedException {
         Animal wolf1 = new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(10),
                 LocalDate.of(LocalDate.now().getYear() - 9, 1, 1));
         Animal wolf2 = new Wolf("wolf3", "gray wolf", BigDecimal.valueOf(15),
                 LocalDate.of(LocalDate.now().getYear() - 5, 1, 1));
         Animal wolf3 = new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(18),
                 LocalDate.of(LocalDate.now().getYear() - 8, 1, 1));
+
         List<Animal> wolfList = List.of(
                 wolf1,
                 wolf2,

@@ -1,6 +1,7 @@
 package ru.mts.hw.repository;
 
 import ru.mts.hw.animal.Animal;
+import ru.mts.hw.exception.MyCheckedException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,5 +41,5 @@ public interface AnimalsRepository {
 
     List<Animal> findOldAndExpensive(List<Animal> animalsList);
 
-    List<Animal> findMinConstAnimals(List<Animal> animalsList);
+    List<Animal> findMinConstAnimals(List<Animal> animalsList) throws MyCheckedException;
 }

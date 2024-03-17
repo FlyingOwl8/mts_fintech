@@ -2,6 +2,7 @@ package ru.mts.hw.animal.impl;
 
 import lombok.Getter;
 import ru.mts.hw.animal.Animal;
+import ru.mts.hw.exception.MyUncheckedException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -82,13 +83,13 @@ public abstract class AbstractAnimal implements Animal {
 
     protected void validateArguments(String breed, BigDecimal cost, LocalDate birthDate) {
         if (breed == null || cost == null || birthDate == null) {
-            throw new IllegalArgumentException("Any field can't be null");
+            throw new MyUncheckedException("Any field can't be null");
         }
         if (breed.isBlank()) {
-            throw new IllegalArgumentException("Breed can't be an empty string");
+            throw new MyUncheckedException("Breed can't be an empty string");
         }
         if (cost.compareTo(BigDecimal.valueOf(0)) < 0) {
-            throw new IllegalArgumentException("Cost can't be negative");
+            throw new MyUncheckedException("Cost can't be negative");
         }
     }
 }
