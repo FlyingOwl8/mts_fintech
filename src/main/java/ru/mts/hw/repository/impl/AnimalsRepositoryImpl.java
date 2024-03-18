@@ -144,6 +144,15 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     public double countAverageAge(List<Animal> animalsList) {
+        if (animalsList == null) {
+            throw new MyUncheckedException("List of Animals is null");
+        }
+        for (Animal animal : animalsList) {
+            if (animal == null) {
+                throw new MyUncheckedException("Animal is null");
+            }
+        }
+
         double ans = animalsList
                 .stream()
                 .map(Animal::getBirthDate)
@@ -158,6 +167,15 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     public List<Animal> findOldAndExpensive(List<Animal> animalsList) {
+        if (animalsList == null) {
+            throw new MyUncheckedException("List of Animals is null");
+        }
+        for (Animal animal : animalsList) {
+            if (animal == null) {
+                throw new MyUncheckedException("Animal is null");
+            }
+        }
+
         BigDecimal sum = animalsList
                 .stream()
                 .map(Animal::getCost)
@@ -178,6 +196,14 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     public List<Animal> findMinConstAnimals(List<Animal> animalsList) throws MyCheckedException {
+        if (animalsList == null) {
+            throw new MyUncheckedException("List of Animals is null");
+        }
+        for (Animal animal : animalsList) {
+            if (animal == null) {
+                throw new MyUncheckedException("Animal is null");
+            }
+        }
         if (animalsList.size() < 3) {
             throw new MyCheckedException("List must contain at least 3 elements");
         }

@@ -19,6 +19,7 @@ import ru.mts.hw.animal.impl.Rabbit;
 import ru.mts.hw.animal.impl.Shark;
 import ru.mts.hw.animal.impl.Wolf;
 import ru.mts.hw.exception.MyCheckedException;
+import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.repository.impl.AnimalsRepositoryImpl;
 import ru.mts.hw.service.impl.CreateAnimalServiceImpl;
 
@@ -219,6 +220,27 @@ public class AnimalRepositoryTest {
     }
 
     @Test
+    @DisplayName("Поиск животных старше некорректного возраста")
+    public void findOlderAnimals5() {
+        int age = -1;
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        List<Animal> deerList = List.of(
+                new Deer("deer1", "european deer", BigDecimal.valueOf(15), LocalDate.now())
+        );
+        Map<String, List<Animal>> leapYearAnimals = Map.of(
+                "gray wolf", wolfList,
+                "european deer", deerList
+        );
+        Mockito.when(createService.createAnimals()).thenReturn(leapYearAnimals);
+        animalsRepository.postConstruct();
+
+        Assertions.assertThrows(MyUncheckedException.class,
+                () -> animalsRepository.findOlderAnimals(age), "Age of animal can't be negative");
+    }
+
+    @Test
     @DisplayName("Поиск дубликатов животных в массиве с уникальными элементами")
     public void findDuplicatesTest1() {
         List<Animal> wolfList = List.of(
@@ -325,7 +347,7 @@ public class AnimalRepositoryTest {
 
     @Test
     @DisplayName("Поиск среднего возраста")
-    public void countAverageAgeTest() {
+    public void countAverageAgeTest1() {
         List<Animal> wolfList = List.of(
                 new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(15),
                         LocalDate.of(LocalDate.now().getYear() - 9, 1, 1)),
@@ -348,8 +370,27 @@ public class AnimalRepositoryTest {
     }
 
     @Test
+    @DisplayName("Поиск среднего возраста для незаданного списка")
+    public void countAverageAgeTest2() {
+        List<Animal> wolfList = null;
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> animalsRepository.countAverageAge(wolfList), "List of Animals is null");
+    }
+
+    @Test
+    @DisplayName("Поиск среднего возраста для незаданных животных")
+    public void countAverageAgeTest3() {
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(null);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> animalsRepository.countAverageAge(wolfList), "Animal is null");
+    }
+
+    @Test
     @DisplayName("Тест метода findOldAndExpensive")
-    public void findOldAndExpensiveTest() {
+    public void findOldAndExpensiveTest1() {
         Animal wolf1 = new Wolf("wolf4", "gray wolf", BigDecimal.valueOf(20),
                 LocalDate.of(LocalDate.now().getYear() - 7, 1, 1));
         Animal wolf2 = new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(18),
@@ -368,8 +409,27 @@ public class AnimalRepositoryTest {
     }
 
     @Test
+    @DisplayName("Тест метода findOldAndExpensive при незаданном списке")
+    public void findOldAndExpensiveTest2() {
+        List<Animal> wolfList = null;
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> animalsRepository.findOldAndExpensive(wolfList), "List of Animals is null");
+    }
+
+    @Test
+    @DisplayName("Тест метода findOldAndExpensive при незаданных животных")
+    public void findOldAndExpensiveTest3() {
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(null);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> animalsRepository.findOldAndExpensive(wolfList), "Animal is null");
+    }
+
+    @Test
     @DisplayName("Поиск 3 животных с минимальными ценами")
-    public void findMinConstAnimalsTest() throws MyCheckedException {
+    public void findMinConstAnimalsTest1() throws MyCheckedException {
         Animal wolf1 = new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(10),
                 LocalDate.of(LocalDate.now().getYear() - 9, 1, 1));
         Animal wolf2 = new Wolf("wolf3", "gray wolf", BigDecimal.valueOf(15),
@@ -387,5 +447,38 @@ public class AnimalRepositoryTest {
         List<Animal> expectedList = List.of(wolf2, wolf1, wolf3);
 
         Assertions.assertEquals(expectedList, animalsRepository.findMinConstAnimals(wolfList));
+    }
+
+    @Test
+    @DisplayName("Поиск 3 животных с минимальными ценами среди недостатоного количества животных")
+    public void findMinConstAnimalsTest2() {
+        List<Animal> wolfList = List.of(
+                new Wolf("wolf1", "gray wolf", BigDecimal.valueOf(10),
+                        LocalDate.now()),
+                new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(15),
+                        LocalDate.now())
+        );
+
+        Assertions.assertThrows(MyCheckedException.class,
+                () -> animalsRepository.findMinConstAnimals(wolfList), "List must contain at least 3 elements");
+    }
+
+    @Test
+    @DisplayName("Поиск 3 животных с минимальными ценами для незаданного списка")
+    public void findMinConstAnimalsTest3() {
+        List<Animal> wolfList = null;
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> animalsRepository.findMinConstAnimals(wolfList), "List of Animals is null");
+    }
+
+    @Test
+    @DisplayName("Поиск 3 животных с минимальными ценами для незаданного списка")
+    public void findMinConstAnimalsTest4() {
+        List<Animal> wolfList = new ArrayList<>();
+        wolfList.add(null);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> animalsRepository.findMinConstAnimals(wolfList), "Animal is null");
     }
 }
