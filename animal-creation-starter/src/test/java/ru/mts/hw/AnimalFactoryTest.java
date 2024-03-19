@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import ru.mts.hw.animal.Animal;
 import ru.mts.hw.config.AnimalNameConfig;
+import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.factory.AnimalTypes;
 import ru.mts.hw.factory.impl.AnimalFactoryImpl;
 
@@ -41,13 +42,13 @@ public class AnimalFactoryTest {
     @Test
     @DisplayName("Некорректное создание животных")
     public void createIncorrectAnimalsTest() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createAnimal(AnimalTypes.WOLF, null, BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)), "Field is null");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "gray wolf", null, LocalDate.ofYearDay(2020, 3)), "Field is null");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(15), null), "Field is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> factory.createAnimal(AnimalTypes.WOLF, null, BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)), "Field is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "gray wolf", null, LocalDate.ofYearDay(2020, 3)), "Field is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(15), null), "Field is null");
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(-15), LocalDate.ofYearDay(2020, 3)), "Cost can't be negative");
+        Assertions.assertThrows(MyUncheckedException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "gray wolf", BigDecimal.valueOf(-15), LocalDate.ofYearDay(2020, 3)), "Cost can't be negative");
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)), "Breed can't be an empty string");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "     ", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)), "Breed can't be an empty string");
+        Assertions.assertThrows(MyUncheckedException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)), "Breed can't be an empty string");
+        Assertions.assertThrows(MyUncheckedException.class, () -> factory.createAnimal(AnimalTypes.WOLF, "     ", BigDecimal.valueOf(15), LocalDate.ofYearDay(2020, 3)), "Breed can't be an empty string");
     }
 }

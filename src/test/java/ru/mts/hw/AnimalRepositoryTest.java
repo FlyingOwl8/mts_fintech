@@ -121,7 +121,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(nullAnimalsMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findLeapYearNames(), "Map of Animals is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> animalsRepository.findLeapYearNames(), "Map of Animals is null");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(nullElementsMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findLeapYearNames(), "Animal is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> animalsRepository.findLeapYearNames(), "Animal is null");
     }
 
     @ParameterizedTest
@@ -198,7 +198,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(nullAnimalsMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findOlderAnimals(age), "Map of Animals is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> animalsRepository.findOlderAnimals(age), "Map of Animals is null");
     }
 
     @Test
@@ -216,7 +216,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(nullElementsMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findOlderAnimals(age), "Animal is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> animalsRepository.findOlderAnimals(age), "Animal is null");
     }
 
     @Test
@@ -325,7 +325,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findDuplicates(), "Map of Animals is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> animalsRepository.findDuplicates(), "Map of Animals is null");
     }
 
     @Test
@@ -342,7 +342,7 @@ public class AnimalRepositoryTest {
         Mockito.when(createService.createAnimals()).thenReturn(animalMap);
         animalsRepository.postConstruct();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> animalsRepository.findDuplicates(), "Animal is null");
+        Assertions.assertThrows(MyUncheckedException.class, () -> animalsRepository.findDuplicates(), "Animal is null");
     }
 
     @Test
@@ -374,7 +374,7 @@ public class AnimalRepositoryTest {
     public void countAverageAgeTest2() {
         List<Animal> wolfList = null;
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(MyUncheckedException.class,
                 () -> animalsRepository.countAverageAge(wolfList), "List of Animals is null");
     }
 
@@ -384,7 +384,7 @@ public class AnimalRepositoryTest {
         List<Animal> wolfList = new ArrayList<>();
         wolfList.add(null);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(MyUncheckedException.class,
                 () -> animalsRepository.countAverageAge(wolfList), "Animal is null");
     }
 
@@ -413,7 +413,7 @@ public class AnimalRepositoryTest {
     public void findOldAndExpensiveTest2() {
         List<Animal> wolfList = null;
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(MyUncheckedException.class,
                 () -> animalsRepository.findOldAndExpensive(wolfList), "List of Animals is null");
     }
 
@@ -423,7 +423,7 @@ public class AnimalRepositoryTest {
         List<Animal> wolfList = new ArrayList<>();
         wolfList.add(null);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(MyUncheckedException.class,
                 () -> animalsRepository.findOldAndExpensive(wolfList), "Animal is null");
     }
 
@@ -468,7 +468,7 @@ public class AnimalRepositoryTest {
     public void findMinConstAnimalsTest3() {
         List<Animal> wolfList = null;
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(MyUncheckedException.class,
                 () -> animalsRepository.findMinConstAnimals(wolfList), "List of Animals is null");
     }
 
@@ -478,7 +478,7 @@ public class AnimalRepositoryTest {
         List<Animal> wolfList = new ArrayList<>();
         wolfList.add(null);
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(MyUncheckedException.class,
                 () -> animalsRepository.findMinConstAnimals(wolfList), "Animal is null");
     }
 }
