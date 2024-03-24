@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -63,7 +65,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
      */
     @Override
     public Map<String, List<Animal>> createAnimals() {
-        Map<String, List<Animal>> animalsMap = new HashMap<>();
+        Map<String, List<Animal>> animalsMap = new ConcurrentHashMap<>();
         Animal newAnimal;
 
         int i = 0;
@@ -74,7 +76,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
                 List<Animal> list = animalsMap.get(animalType);
                 list.add(newAnimal);
             } else {
-                List<Animal> list = new ArrayList<>();
+                List<Animal> list = new CopyOnWriteArrayList<>();
                 list.add(newAnimal);
                 animalsMap.put(animalType, list);
             }

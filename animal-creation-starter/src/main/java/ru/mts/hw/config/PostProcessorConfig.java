@@ -4,16 +4,9 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootConfiguration
-public class Config {
+public class PostProcessorConfig {
     @Bean
     public static CreateAnimalBeanPostProcessor addPostProcessor() {
         return new CreateAnimalBeanPostProcessor();
     }
-/**
-    @Bean
-    @Scope("prototype") public CreateAnimalService createAnimalService(AnimalFactory factory) {
-    CreateAnimalService createAnimalService = new CreateAnimalServiceImpl(factory);
-        return createAnimalService;
-    }
- */
 }

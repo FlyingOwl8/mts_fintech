@@ -33,6 +33,8 @@ public interface AnimalsRepository {
      */
     Map<String, List<Animal>> findDuplicates();
 
+    String generateDuplicatesText();
+
     void printDuplicates();
 
     double countAverageAge(List<Animal> animalsList);

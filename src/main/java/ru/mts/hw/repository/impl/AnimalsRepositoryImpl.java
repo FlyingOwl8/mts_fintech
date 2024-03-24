@@ -118,7 +118,22 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         return duplicatedAnimals;
     }
 
+    public String generateDuplicatesText() {
+        Map<String, List<Animal>> duplicatedAnimals = findDuplicates();
+        StringBuilder duplicatesString = new StringBuilder();
+        for (String currentAnimalType : duplicatedAnimals.keySet()) {
+            duplicatesString.append("Найдены дубликаты ").append(currentAnimalType).append(":\n");
+            for (Animal animal : duplicatedAnimals.get(currentAnimalType)) {
+                duplicatesString.append(animal).append("\n");
+            }
+            duplicatesString.append("---Конец дубликатов---\n");
+        }
+        duplicatesString.append("-----\n");
+        return duplicatesString.toString();
+    }
+
     public void printDuplicates() {
+        /*
         Map<String, List<Animal>> duplicatedAnimals = findDuplicates();
         for (String currentAnimalType : duplicatedAnimals.keySet()) {
             System.out.println("Найдены дубликаты " + currentAnimalType + ":");
@@ -128,6 +143,8 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
             System.out.println("---Конец дубликатов---");
         }
         System.out.println("-----");
+         */
+        System.out.println(generateDuplicatesText());
     }
 
     private void validateAnimals() {

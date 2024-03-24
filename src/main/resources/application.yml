@@ -1,0 +1,11 @@
+animal:
+  wolf-names: Antoshka,Oleja
+  shark-names: Deniska,Vladno
+  rabbit-names: Egorka,Nikitos
+  deer-names: Sven,Olaf
+
+
+delays:
+  report-current-time-delay: 10000
+  print-duplicates-delay: 5000
+  find-average-age-delay: 10000

@@ -1,5 +1,6 @@
 package ru.mts.hw.sheduled;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -9,20 +10,43 @@ import ru.mts.hw.animal.impl.Wolf;
 import ru.mts.hw.exception.MyCheckedException;
 import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.repository.AnimalsRepository;
+import ru.mts.hw.repository.config.DelaysConfig;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class SheduledTask {
+public class ScheduledTask {
     private final AnimalsRepository animalsRepository;
+    private final PrintDuplicatesRunnable printDuplicates;
+    private final FindAverageAgeRunnable averageAge;
+    private final DelaysConfig delaysConfig;
 
-    @Scheduled(fixedRate = 10000)
+    @PostConstruct
+    private void createThreads() {
+        ScheduledExecutorService printDuplicatesService = Executors.newSingleThreadScheduledExecutor(
+                new ThreadFactoryBuilder().setNameFormat("PrintDuplicatesThread").build()
+        );
+        printDuplicatesService.scheduleAtFixedRate(printDuplicates,
+                0, delaysConfig.getPrintDuplicatesDelay(), TimeUnit.MILLISECONDS);
+
+        ScheduledExecutorService findAverageAgeService = Executors.newSingleThreadScheduledExecutor(
+                new ThreadFactoryBuilder().setNameFormat("FindAverageAgeThread").build()
+        );
+        findAverageAgeService.scheduleAtFixedRate(averageAge,
+                0, delaysConfig.getFindAverageAgeDelay(), TimeUnit.MILLISECONDS);
+    }
+
+    @Scheduled(fixedRateString = "${delays.report-current-time-delay}")
     public void reportCurrentTime() {
         try {
             Map<String, LocalDate> animalNamesArray = animalsRepository.findLeapYearNames();
@@ -51,6 +75,7 @@ public class SheduledTask {
                 System.out.println(animal);
             }
             System.out.println("-----");
+
         } catch (MyUncheckedException e) {
             log.error("My unchecked exception: " + e.getMessage());
         } catch (MyCheckedException e) {
