@@ -6,16 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.mts.hw.animal.Animal;
-import ru.mts.hw.animal.impl.Wolf;
-import ru.mts.hw.exception.MyCheckedException;
 import ru.mts.hw.exception.MyUncheckedException;
 import ru.mts.hw.repository.AnimalsRepository;
 import ru.mts.hw.repository.config.DelaysConfig;
 
 import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -61,25 +57,9 @@ public class ScheduledTask {
                 System.out.println(animal);
             }
             System.out.println("-----");
-            System.out.println("Поиск одинаковых животных:");
-            animalsRepository.printDuplicates();
-            System.out.println("-----");
-
-            Animal wolf1 = new Wolf("wolf2", "gray wolf", BigDecimal.valueOf(10),
-                    LocalDate.of(LocalDate.now().getYear() - 9, 1, 1));
-            Animal wolf2 = new Wolf("wolf3", "gray wolf", BigDecimal.valueOf(15),
-                    LocalDate.of(LocalDate.now().getYear() - 5, 1, 1));
-            List<Animal> wolfList = List.of(wolf1, wolf2);
-            List<Animal> foundAnimals = animalsRepository.findMinConstAnimals(wolfList);
-            for (Animal animal : foundAnimals) {
-                System.out.println(animal);
-            }
-            System.out.println("-----");
 
         } catch (MyUncheckedException e) {
             log.error("My unchecked exception: " + e.getMessage());
-        } catch (MyCheckedException e) {
-            log.error("My checked exception: " + e.getMessage());
         } catch (Exception e) {
             log.error("Exception: " + e.getMessage());
         }

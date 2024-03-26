@@ -13,9 +13,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     public Map<String, LocalDate> findLeapYearNames() {
         validateAnimals();
 
-        Map<String, LocalDate> leapYearNames = new HashMap<>();
+        Map<String, LocalDate> leapYearNames = new ConcurrentHashMap<>();
 
         animalsMap.entrySet()
                 .stream()
@@ -69,7 +70,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         validateAnimals();
 
         LocalDate currentDate = LocalDate.now();
-        Map<Animal, Integer> olderAnimalsMap = new HashMap<>();
+        Map<Animal, Integer> olderAnimalsMap = new ConcurrentHashMap<>();
 
         Animal oldestAnimal = null;
 
@@ -110,11 +111,22 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                         .flatMap(List::stream)
                         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        Map<String, List<Animal>> duplicatedAnimals = animalsMap.values()
+        Map<String, List<Animal>> duplicatedAnimals = new ConcurrentHashMap<>();
+        animalsMap.values()
                 .stream()
                 .flatMap(List::stream)
                 .filter(animal -> animalsFrequencies.get(animal) > 1)
-                .collect(Collectors.groupingBy(Animal::getBreed));
+                .forEach(animal -> {
+                            if (duplicatedAnimals.containsKey(animal.getBreed())) {
+                                List<Animal> list = duplicatedAnimals.get(animal.getBreed());
+                                list.add(animal);
+                            } else {
+                                List<Animal> list = new CopyOnWriteArrayList<>();
+                                list.add(animal);
+                                duplicatedAnimals.put(animal.getBreed(), list);
+                            }
+                        }
+                );
         return duplicatedAnimals;
     }
 
@@ -133,17 +145,6 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     public void printDuplicates() {
-        /*
-        Map<String, List<Animal>> duplicatedAnimals = findDuplicates();
-        for (String currentAnimalType : duplicatedAnimals.keySet()) {
-            System.out.println("Найдены дубликаты " + currentAnimalType + ":");
-            for (Animal animal : duplicatedAnimals.get(currentAnimalType)) {
-                System.out.println(animal);
-            }
-            System.out.println("---Конец дубликатов---");
-        }
-        System.out.println("-----");
-         */
         System.out.println(generateDuplicatesText());
     }
 
@@ -199,15 +200,15 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal averageCost = sum.divide(BigDecimal.valueOf(animalsList.size()));
 
-        List<Animal> sortedAnimals = animalsList
-                .stream()
+        List<Animal> sortedAnimals = new CopyOnWriteArrayList<>();
+        animalsList.stream()
                 .filter(animal -> Period.between(
                                 animal.getBirthDate(), LocalDate.now()
                         ).getYears() > 5 &&
                                 animal.getCost().compareTo(averageCost) > 0
                 )
                 .sorted(Comparator.comparing(Animal::getBirthDate))
-                .collect(Collectors.toList());
+                .forEach(sortedAnimals::add);
 
         return sortedAnimals;
     }
@@ -224,11 +225,13 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         if (animalsList.size() < 3) {
             throw new MyCheckedException("List must contain at least 3 elements");
         }
-        return animalsList
-                .stream()
+        List<Animal> animalList = new CopyOnWriteArrayList<>();
+
+        animalsList.stream()
                 .sorted(Comparator.comparing(Animal::getCost))
                 .limit(3)
                 .sorted(Comparator.comparing(Animal::getName).reversed())
-                .collect(Collectors.toList());
+                .forEach(animalList::add);
+        return animalList;
     }
 }
